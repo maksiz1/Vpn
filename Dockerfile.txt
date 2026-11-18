@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -U -r requirements.txt
+
+COPY . .
+
+RUN mkdir -p /data/configs /data/logs /data/storage /data/plugins
+
+COPY railway-entrypoint.sh /usr/local/bin/railway-entrypoint.sh
+RUN chmod +x /usr/local/bin/railway-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/railway-entrypoint.sh"]
